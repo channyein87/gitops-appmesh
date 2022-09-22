@@ -1,43 +1,17 @@
 apiVersion: eksctl.io/v1alpha5
 kind: ClusterConfig
 metadata:
-  name: gitops-appmesh
-  region: ap-southeast-2
-  version: "1.22"
-vpc:
-  id: "vpc-86785de1"
-  nat:
-    gateway: Disabled
-  subnets:
-    public:
-      ap-southeast-2a:
-        id: "subnet-9a5e53fd"
-      ap-southeast-2b:
-        id: "subnet-9ea39cd7"
-managedNodeGroups:
-  - name: ng-1
-    instanceType: m5a.large
-    minSize: 2
-    maxSize: 3
+  name: appmesh
+  region: us-west-2
+  version: "1.18"
+nodeGroups:
+  - name: default
+    instanceType: m5.large
     desiredCapacity: 2
-    volumeSize: 50
+    volumeSize: 120
     iam:
       withAddonPolicies:
         appMesh: true
         xRay: true
         certManager: true
-        awsLoadBalancerController: true
-        cloudWatch: true
-        externalDNS: true
-        autoScaler: true
-iam:
-  withOIDC: true
-addons:
-  - name: vpc-cni
-    version: latest
-    attachPolicyARNs:
-      - arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy
-  - name: coredns
-    version: latest
-  - name: kube-proxy
-    version: latest
+        albIngress: true
